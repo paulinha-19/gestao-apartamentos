@@ -1,1 +1,1 @@
-# Sistema gestao de partamentos
+# Sistema gestao de apartamentos
