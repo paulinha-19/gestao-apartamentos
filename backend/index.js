@@ -1,21 +1,20 @@
-import express from "express";
-import cors from "cors";
-import bodyParser from "body-parser";
-import dotenv from "dotenv/config.js";
-import authAndSyncDb from "./utils/authAndSyncDb.js"
-import router from "./router/index.js";
-
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+// const authAndSyncDb = require("./utils/authAndSyncDb");
+const router = require("./router/index");
 const app = express();
-const PORT = process.env.PORT;
-authAndSyncDb();
+require("dotenv").config();
+// authAndSyncDb();
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(router)
-app.listen(PORT, () =>
-    console.log(`Servidor iniciado na porta ${PORT}`)
+app.listen(process.env.PORT || 4005, () =>
+    console.log(`Servidor iniciado na porta ${process.env.PORT}`)
 );
 
 

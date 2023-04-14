@@ -1,4 +1,4 @@
-import Edificio from "../models/edificio.js";
+const { Edificio } = require("../models");
 
 const getAllBuilding = async (req, res) => {
     try {
@@ -94,4 +94,10 @@ const deleteBuilding = async (req, res) => {
     }
 }
 
-export default { getAllBuilding, getOneBuilding, createBuilding, updateBuilding, deleteBuilding }
+module.exports = {
+    getAllBuilding,
+    getOneBuilding,
+    createBuilding,
+    updateBuilding,
+    deleteBuilding
+}
