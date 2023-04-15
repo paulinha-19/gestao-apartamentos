@@ -1,15 +1,12 @@
-import dotenv from "dotenv/config.js";
-import Sequelize from ("sequelize");
-import db from ('../config/db.js');
+require("dotenv").config();
+const sequelize = require('../config/db');
 
-const syncTable = async () => {
+(async () => {
     try {
-        await db.authenticate;
+        await sequelize.authenticate();
         console.log(`Conectado ao banco de dados: ${process.env.DB_NAME}`);
-        await db.sync;
+        await sequelize.sync();
     } catch (error) {
         console.error(`Erro: `, error.message);
     }
-}
-
-export default syncTable;
+})()

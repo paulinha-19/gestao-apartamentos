@@ -14,5 +14,8 @@
   "license": "ISC",
   "devDependencies": {
     "sequelize-cli": "^6.6.0"
+  },
+  "dependencies": {
+    "yup": "^1.1.1"
   }
 }
