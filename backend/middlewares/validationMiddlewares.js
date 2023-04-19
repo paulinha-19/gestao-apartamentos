@@ -13,6 +13,7 @@ const validationFields = (schema) => async (req, res, next) => {
         }));
         console.error("ERRO YUP", errors)
         return res.status(400).json({ errors });
+        // return res.status(400).json({ error: error.errors.join(', ') });
     }
 }
 

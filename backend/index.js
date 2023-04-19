@@ -5,13 +5,13 @@ const router = require("./router/index");
 const app = express();
 require("dotenv").config();
 const syncTable = require("./utils/authAndSyncDb");
-const edificioRouter = require("./router/router-edificio");
+const buildingRouter = require("./router/router-building");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-app.use(router, edificioRouter);
+app.use(router, buildingRouter);
 app.listen(process.env.PORT || 4005, () =>
     console.log(`Servidor iniciado na porta ${process.env.PORT}`)
 );

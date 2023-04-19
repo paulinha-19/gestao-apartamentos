@@ -1,6 +1,6 @@
 const yup = require("yup");
 
-const edificioSchema = yup.object({
+const buildingSchema = yup.object({
     nomeEdificio: yup.string()
         .min(2, "Insira no minimo 2 caracters no nome do Edificio")
         .max(40, "Insira no máximo 40 caracters no nome do Edificio")
@@ -24,4 +24,4 @@ const edificioSchema = yup.object({
         }),
 })
 
-module.exports = edificioSchema;
+module.exports = buildingSchema;
