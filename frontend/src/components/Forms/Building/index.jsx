@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button } from "@mui/material";
 import Grid2 from '@mui/material/Unstable_Grid2';
-import { postBuilding } from '../../services/requests';
+import { postBuilding } from '../../../services/requests';
 import { useQueryClient, useMutation } from 'react-query';
-import { showSuccessSubmit, showErrorSubmit} from '../../../utils/react-toastify';
+import { showSuccessSubmit, showErrorSubmit } from '../../../../utils/react-toastify';
+import { Player } from '@lottiefiles/react-lottie-player';
+import buildingAnimation from "../Building/building.json"
 
 export const BuildingForm = () => {
     const [formBuilding, setFormBuilding] = useState({
@@ -25,7 +27,7 @@ export const BuildingForm = () => {
         postBuilding,
         {
             onSuccess: (data) => {
-                const {nomeEdificio} = data;
+                const { nomeEdificio } = data;
                 showSuccessSubmit(nomeEdificio)
                 setFormBuilding({
                     nomeEdificio: "",
@@ -51,15 +53,22 @@ export const BuildingForm = () => {
             component="form"
             autoComplete="off"
             onSubmit={handleSubmitBuilding}
-            sx={{ flexGrow: 1 }}
+            sx={{ mt: 5, display: 'flex', flexWrap: "wrap", flexGrow: 1, justifyContent: 'center' }}
         >
-            <Grid2 container spacing={2}>
-                <Grid2 xs={12} sm={12} md={6} lg={6} xl={3}>
+            <Player
+                loop
+                autoplay
+                speed={2}
+                src={buildingAnimation}
+                style={{ width: "300px", height: '100%' }} />
+            <Grid2 container maxWidth="md" spacing={2}>
+                <Grid2 xs={12} sm={12} md={12} lg={12} xl={12}>
                     <TextField
                         name='nomeEdificio'
                         id="nomeEdificio"
                         label="Nome do edificio"
                         type='text'
+                        fullWidth
                         value={formBuilding.nomeEdificio}
                         onChange={(e) => handleChangeTextField(e)}
                         error={isError && error?.response?.data?.errors.some((e) => e.path === 'nomeEdificio')}
@@ -69,12 +78,13 @@ export const BuildingForm = () => {
                         }
                     />
                 </Grid2>
-                <Grid2 xs={12} sm={12} md={6} lg={6} xl={3}>
+                <Grid2 xs={12} sm={12} md={12} lg={12} xl={12}>
                     <TextField
                         name='enderecoEdificio'
                         id="enderecoEdificio"
                         label="Endereço do edificio"
                         type='text'
+                        fullWidth
                         value={formBuilding.enderecoEdificio}
                         onChange={(e) => handleChangeTextField(e)}
                         error={isError && error?.response?.data?.errors.some((e) => e.path === 'enderecoEdificio')}
@@ -84,12 +94,13 @@ export const BuildingForm = () => {
                         }
                     />
                 </Grid2>
-                <Grid2 xs={12} sm={12} md={6} lg={6} xl={3}>
+                <Grid2 xs={12} sm={12} md={12} lg={12} xl={12}>
                     <TextField
                         name='qtdAndarEdificio'
                         id="qtdAndarEdificio"
                         label="Quantidade de andar"
                         type='number'
+                        fullWidth
                         value={formBuilding.qtdAndarEdificio}
                         onChange={(e) => handleChangeTextField(e)}
                         error={isError && error?.response?.data?.errors.some((e) => e.path === 'qtdAndarEdificio')}
@@ -99,12 +110,13 @@ export const BuildingForm = () => {
                         }
                     />
                 </Grid2>
-                <Grid2 xs={12} sm={12} md={6} lg={6} xl={3}>
+                <Grid2 xs={12} sm={12} md={12} lg={12} xl={12}>
                     <TextField
                         name='qtdApartPorAndar'
                         id="qtdApartPorAndar"
                         label="Quantidade de apartamento"
                         type='number'
+                        fullWidth
                         value={formBuilding.qtdApartPorAndar}
                         onChange={(e) => handleChangeTextField(e)}
                         error={isError && error?.response?.data?.errors.some((e) => e.path === 'qtdApartPorAndar')}
@@ -118,6 +130,19 @@ export const BuildingForm = () => {
                     <Button type="submit" variant="contained"
                         color="primary" disabled={isLoading}>
                         {isLoading ? 'Enviando...' : 'Enviar'}
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="inherit"
+                        sx={{ ml: 5 }}
+                        onClick={() => setFormBuilding({
+                            nomeEdificio: "",
+                            enderecoEdificio: "",
+                            qtdAndarEdificio: "",
+                            qtdApartPorAndar: ""
+                        })}
+                    >
+                        Limpar
                     </Button>
                 </Grid2>
             </Grid2>
