@@ -5,7 +5,10 @@ import { postBuilding } from '../../../services/requests';
 import { useQueryClient, useMutation } from 'react-query';
 import { showSuccessSubmit, showErrorSubmit } from '../../../../utils/react-toastify';
 import { Player } from '@lottiefiles/react-lottie-player';
-import buildingAnimation from "../Building/building.json"
+import buildingAnimation from "../Building/building.json";
+import { devices } from "../../../../utils/breakpoints";
+import styled from "styled-components"
+
 
 export const BuildingForm = () => {
     const [formBuilding, setFormBuilding] = useState({
@@ -48,19 +51,44 @@ export const BuildingForm = () => {
         event.preventDefault();
         mutate(formBuilding);
     }
+    const ResponsivePlayer = styled(Player)`
+    @media ${devices.xs} {
+        width: 300px;
+        height: 100%;
+    }
+    @media ${devices.sm} {
+        width: 300px;
+        height: 100%;
+    }
+    @media ${devices.md} {
+        width: 350px;
+        height: 100%;
+    }
+    @media ${devices.lg} {
+        width: 400px;
+        height: 100%;
+    }
+    @media ${devices.xl} {
+        width: 400px;
+        height: 100%;
+    }
+  `;
+
     return (
         <Box
             component="form"
             autoComplete="off"
             onSubmit={handleSubmitBuilding}
-            sx={{ mt: 5, display: 'flex', flexWrap: "wrap", flexGrow: 1, justifyContent: 'center' }}
+            sx={{ mt: 5, display: 'flex', flexWrap: "wrap", justifyContent: 'center' }}
         >
-            <Player
-                loop
-                autoplay
-                speed={2}
-                src={buildingAnimation}
-                style={{ width: "300px", height: '100%' }} />
+            <Box>
+                <ResponsivePlayer
+                    loop
+                    autoplay
+                    speed={2}
+                    src={buildingAnimation}
+                />
+            </Box>
             <Grid2 container maxWidth="md" spacing={2}>
                 <Grid2 xs={12} sm={12} md={12} lg={12} xl={12}>
                     <TextField
