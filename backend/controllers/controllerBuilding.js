@@ -1,4 +1,4 @@
-const { Edificio } = require("../models");
+const { Edificio, Apartamento, sequelize } = require("../models");
 const { floor } = require("../utils/generateAllFloors");
 
 const getAllBuilding = async (req, res) => {
@@ -16,21 +16,38 @@ const getAllBuilding = async (req, res) => {
 
 const getAllBuildingName = async (req, res) => {
     try {
-        const building = await Edificio.findAll({
-            attributes: ['id', 'nomeEdificio'],
-            order: [
-                ['nomeEdificio', 'ASC'],
-            ]
+        const buildings = await Edificio.findAll({
+            attributes: ['id', 'nomeEdificio', 'qtdAndarEdificio', 'qtdApartPorAndar'],
+            order: [['nomeEdificio', 'ASC']],
         });
-        if (building.length === 0) {
+
+        const buildingsWithApartments = await Promise.all(
+            buildings.map(async (building) => {
+                const { id, qtdAndarEdificio, qtdApartPorAndar } = building;
+                const apartments = await Apartamento.count({
+                    where: { edificioId: id },
+                    having: sequelize.literal(`count(*) >= ${qtdAndarEdificio * qtdApartPorAndar}`),
+                });
+
+                return apartments < qtdAndarEdificio * qtdApartPorAndar
+                    ? { id, nomeEdificio: building.nomeEdificio }
+                    : null;
+            })
+        );
+
+        const filteredBuildings = buildingsWithApartments.filter((building) => building !== null);
+
+        if (filteredBuildings.length === 0) {
             return res.status(404).json({ message: 'Nenhum nome encontrado' });
         }
-        return res.status(200).json(building);
+        return res.status(200).json(filteredBuildings);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({ message: `Erro interno do servidor: ${error.message}` });
     }
-}
+};
+
+
 
 const getAllBuildingFloor = async (req, res) => {
     const { id } = req.params;
@@ -39,12 +56,29 @@ const getAllBuildingFloor = async (req, res) => {
         if (!building) {
             return res.status(404).json({ message: 'Edificio não encontrado' });
         }
+
         const floors = floor(building.qtdAndarEdificio);
-        return res.status(200).json(floors);
+
+        const availableFloors = [];
+
+        for (const andar of floors) {
+            const apartmentsCount = await Apartamento.count({
+                where: {
+                    andarApartamento: andar,
+                    edificioId: building.id
+                },
+            });
+
+            if (apartmentsCount < building.qtdApartPorAndar) {
+                availableFloors.push(andar);
+            }
+        }
+        return res.status(200).json(availableFloors);
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-}
+};
+
 
 const getOneBuilding = async (req, res) => {
     try {

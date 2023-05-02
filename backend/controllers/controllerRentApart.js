@@ -35,4 +35,43 @@
 //     }
 // }
 
+// ALUGUEÇ
+
+// const getAllBuildingName = async (req, res) => {
+//   try {
+//     const buildings = await Edificio.findAll({
+//       attributes: ['id', 'nomeEdificio'],
+//       include: [
+//         {
+//           model: Apartamento,
+//           where: { disponivelApartamento: true },
+//           required: false
+//         }
+//       ],
+//       order: [
+//         ['nomeEdificio', 'ASC'],
+//       ]
+//     });
+
+//     const filteredBuildings = buildings.filter(building => {
+//       const hasAvailableApartments = building.Apartamentos.some(apartment => apartment.disponivelApartamento);
+//       return hasAvailableApartments;
+//     });
+
+//     if (filteredBuildings.length === 0) {
+//       return res.status(404).json({ message: 'Nenhum nome encontrado' });
+//     }
+
+//     const buildingNames = filteredBuildings.map(building => {
+//       return { id: building.id, nomeEdificio: building.nomeEdificio };
+//     });
+
+//     return res.status(200).json(buildingNames);
+//   } catch (error) {
+//     console.error(error.message);
+//     return res.status(500).json({ message: `Erro interno do servidor: ${error.message}` });
+//   }
+// }
+
+
 // export default createRentApartment
