@@ -1,4 +1,4 @@
-exports.generateApartmentNumbers = async (floorNumber, apartmentsPerFloor) => {
+exports.generateApartmentNumbers =  (floorNumber, apartmentsPerFloor) => {
     try {
         const arrayNumberApartment = [];
         for (let i = 1; i <= apartmentsPerFloor; i++) {

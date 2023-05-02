@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { BuildingForm } from './components/Forms';
+import { BuildingForm, ApartmentForm } from './components/Forms';
 import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
     <div>
       <BuildingForm />
+      <ApartmentForm />
       <ToastContainer />
     </div>
   )

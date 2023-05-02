@@ -1,12 +1,48 @@
 const { Edificio } = require("../models");
+const { floor } = require("../utils/generateAllFloors");
 
 const getAllBuilding = async (req, res) => {
     try {
         const building = await Edificio.findAll();
+        if (building.length === 0) {
+            return res.status(404).json({ message: 'Nenhum edifício encontrado' });
+        }
         return res.status(200).json(building);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({ message: `Erro interno do servidor: ${error.message}` });
+    }
+}
+
+const getAllBuildingName = async (req, res) => {
+    try {
+        const building = await Edificio.findAll({
+            attributes: ['id', 'nomeEdificio'],
+            order: [
+                ['nomeEdificio', 'ASC'],
+            ]
+        });
+        if (building.length === 0) {
+            return res.status(404).json({ message: 'Nenhum nome encontrado' });
+        }
+        return res.status(200).json(building);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({ message: `Erro interno do servidor: ${error.message}` });
+    }
+}
+
+const getAllBuildingFloor = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const building = await Edificio.findByPk(id);
+        if (!building) {
+            return res.status(404).json({ message: 'Edificio não encontrado' });
+        }
+        const floors = floor(building.qtdAndarEdificio);
+        return res.status(200).json(floors);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
 }
 
@@ -100,5 +136,7 @@ module.exports = {
     getOneBuilding,
     createBuilding,
     updateBuilding,
-    deleteBuilding
+    deleteBuilding,
+    getAllBuildingName,
+    getAllBuildingFloor
 }

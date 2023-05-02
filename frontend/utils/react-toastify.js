@@ -1,8 +1,8 @@
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export const showSuccessSubmit = (data) => {
-    toast.success(`O ${data} foi criado.`, {
+export const showSuccessSubmit = (...data) => {
+    toast.success(...data, {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: true,

@@ -5,7 +5,7 @@ import { postBuilding } from '../../../services/requests';
 import { useQueryClient, useMutation } from 'react-query';
 import { showSuccessSubmit, showErrorSubmit } from '../../../../utils/react-toastify';
 import { Player } from '@lottiefiles/react-lottie-player';
-import buildingAnimation from "../Building/building.json";
+import buildingAnimation from "../Building/animations/constructor.json";
 import { devices } from "../../../../utils/breakpoints";
 import styled from "styled-components"
 
@@ -30,8 +30,8 @@ export const BuildingForm = () => {
         postBuilding,
         {
             onSuccess: (data) => {
-                const { nomeEdificio } = data;
-                showSuccessSubmit(nomeEdificio)
+                const { nomeEdificio, enderecoEdificio } = data;
+                showSuccessSubmit(`O ${nomeEdificio} foi criado no endereço ${enderecoEdificio}.`);
                 setFormBuilding({
                     nomeEdificio: "",
                     enderecoEdificio: "",
@@ -43,7 +43,7 @@ export const BuildingForm = () => {
                 console.error(error);
             },
             onSettled: () => {
-                queryClient.invalidateQueries("management-apartments");
+                queryClient.invalidateQueries("post-building");
             },
         }
     );
