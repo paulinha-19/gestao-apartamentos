@@ -1,11 +1,12 @@
-const { Apartment } = require("@mui/icons-material");
 const { Apartamento, Edificio } = require("../models");
 const { generateApartmentNumbers } = require("../utils/generateApartmentsNumbers");
-const { getAllBuildingFloor } = require("./controllerBuilding");
 
 const getAllApartment = async (req, res) => {
     try {
-        const apartment = await Apartamento.findAll({ order: [['numeroApartamento', 'ASC']], include: [{ model: Edificio }] });
+        const apartment = await Apartamento.findAll({
+            order: [['id', 'ASC']],
+            include: [{ model: Edificio }]
+        });
         return res.status(200).json(apartment);
     } catch (error) {
         console.error(error.message);
@@ -13,7 +14,7 @@ const getAllApartment = async (req, res) => {
     }
 }
 
-const getAOneApartment = async () => {
+const getAOneApartment = async (req, res) => {
     try {
         const { id } = req.params;
         const apartment = await Apartamento.findByPk(id);
@@ -44,8 +45,6 @@ const getApartmentsNumbers = async (req, res) => {
             attributes: ['numeroApartamento'],
             include: Edificio
         });
-        console.log("EX", existingApartments);
-
         const apartmentNumbers = generateApartmentNumbers(andar, building.qtdApartPorAndar);
         // Filtra os números gerados que ainda não foram usados
         const availableApartments = apartmentNumbers.filter(
@@ -90,6 +89,31 @@ const createApartment = async (req, res) => {
     }
 }
 
+const getAvailableApartments = async (req, res) => {
+    try {
+        const apartments = await Apartamento.findAll({
+            order: [['id', 'ASC']],
+            where: {
+                disponivelApartamento: true,
+            },
+            include: {
+                model: Edificio,
+                attributes: ['id', 'nomeEdificio'],
+            },
+        });
+
+        if (apartments.length === 0) {
+            return res.status(404).json({ message: 'Nenhum apartamento disponível encontrado' });
+        }
+
+        return res.status(200).json(apartments);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({ message: `Erro interno do servidor: ${error.message}` });
+    }
+};
+
+
 const uptadeApartment = async (req, res) => {
     try {
         const { id } = req.params;
@@ -129,5 +153,6 @@ module.exports = {
     createApartment,
     uptadeApartment,
     deleteApartment,
-    getApartmentsNumbers
+    getApartmentsNumbers,
+    getAvailableApartments
 }

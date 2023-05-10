@@ -17,8 +17,8 @@ const getAllBuilding = async (req, res) => {
 const getAllBuildingName = async (req, res) => {
     try {
         const buildings = await Edificio.findAll({
-            attributes: ['id', 'nomeEdificio', 'qtdAndarEdificio', 'qtdApartPorAndar'],
             order: [['nomeEdificio', 'ASC']],
+            attributes: ['id', 'nomeEdificio', 'qtdAndarEdificio', 'qtdApartPorAndar'],
         });
 
         const buildingsWithApartments = await Promise.all(
@@ -34,7 +34,6 @@ const getAllBuildingName = async (req, res) => {
                     : null;
             })
         );
-
         const filteredBuildings = buildingsWithApartments.filter((building) => building !== null);
 
         if (filteredBuildings.length === 0) {
@@ -46,7 +45,6 @@ const getAllBuildingName = async (req, res) => {
         return res.status(500).json({ message: `Erro interno do servidor: ${error.message}` });
     }
 };
-
 
 
 const getAllBuildingFloor = async (req, res) => {
@@ -112,7 +110,7 @@ const createBuilding = async (req, res) => {
         });
 
     } catch (error) {
-        console.log("SEQUELIZE", error);
+        console.error(error.message);
         return res.status(500).json({ message: `Ocorreu um erro ao cadastrar o edifício: ${error.message}` });
     }
 }

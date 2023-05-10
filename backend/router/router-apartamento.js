@@ -6,10 +6,12 @@ const {
     createApartment,
     uptadeApartment,
     deleteApartment,
-    getApartmentsNumbers
+    getApartmentsNumbers,
+    getAvailableApartments
 } = require("../controllers/controllerApartment");
 
 router.get("/api/apartamentos", getAllApartment);
+router.get("/api/apartamentos/disponiveis", getAvailableApartments);
 router.get("/api/apartamentos/:id", getAOneApartment);
 router.get("/api/edificios/:id/andares/:andar/apartamentos", getApartmentsNumbers);
 router.post("/api/edificios/:id/apartamentos", createApartment);
